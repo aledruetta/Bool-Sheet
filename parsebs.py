@@ -16,24 +16,39 @@ class InvalidSymbols(Error):
         print('Invalid symbols: ', self.expression)
 
 
-def parse(boolexp):
-    boolexp = boolexp.replace(' ', '')
-    pattern = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
-    match = pattern.findall(boolexp)
+class BoolSheet:
+    def __init__(self, expstr):
+        self.expstr = expstr.replace(' ', '')
 
-    try:
-        if match:
-            raise InvalidSymbols(match)
-    except InvalidSymbols as err:
-        err.msg
-        return
+    def parse(self):
+        pattern = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
+        match = pattern.findall(self.expstr)
 
-    bexp_lst = list(boolexp)
-    print('Symbols: ', bexp_lst)
+        try:
+            if match:
+                raise InvalidSymbols(match)
+        except InvalidSymbols as err:
+            err.msg
+            raise
+
+        return list(self.expstr)
+
+    def graph(parsexp):
+        pass
 
 
 def main():
-    pass
+    try:
+        bs = BoolSheet('(A + B)C')
+        print('Expression: {}, Symbols: {}'.format(bs.expstr, bs.parse()))
+    except InvalidSymbols:
+        return
+
+    try:
+        bs = BoolSheet('(A + B*)C ?')
+        print('Expression: {}, Symbols: {}'.format(bs.expstr, bs.parse()))
+    except InvalidSymbols:
+        return
 
 
 if __name__ == '__main__':
