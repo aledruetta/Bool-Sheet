@@ -13,7 +13,7 @@ class InvalidSymbols(Error):
 
     @property
     def msg(self):
-        print('Invalid symbols: ', self.expression)
+        print('Invalid Symbols Error: ', self.expression)
 
 
 class BoolSheet:
@@ -39,14 +39,18 @@ class BoolSheet:
 
 def main():
     try:
-        bs = BoolSheet('(A + B)C')
-        print('Expression: {}, Symbols: {}'.format(bs.expstr, bs.parse()))
+        exp = '(~A + B)C'
+        bs = BoolSheet(exp)
+        print('Input: {}'.format(exp))
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.parse()))
     except InvalidSymbols:
         return
 
     try:
-        bs = BoolSheet('(A + B*)C ?')
-        print('Expression: {}, Symbols: {}'.format(bs.expstr, bs.parse()))
+        exp = '(A + B*)C ?'
+        bs = BoolSheet(exp)
+        print('Input: {}'.format(exp))
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.parse()))
     except InvalidSymbols:
         return
 
