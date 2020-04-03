@@ -8,28 +8,24 @@ class Error(Exception):
 
 
 class InvalidSymbols(Error):
-    def __init__(self, exp):
-        self.expression = exp
+    def __init__(self, symbols):
+        self.symbols = symbols
 
     @property
     def msg(self):
-        print('Invalid Symbols Error: ', self.expression)
+        return 'Invalid Symbols Error: {}'.format(self.symbols)
 
 
 class BoolSheet:
     def __init__(self, expstr):
         self.expstr = expstr.replace(' ', '')
 
-    def parse(self):
+    def to_lst(self):
         pattern = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
         match = pattern.findall(self.expstr)
 
-        try:
-            if match:
-                raise InvalidSymbols(match)
-        except InvalidSymbols as err:
-            err.msg
-            raise
+        if match:
+            raise InvalidSymbols(match)
 
         return list(self.expstr)
 
@@ -40,18 +36,20 @@ class BoolSheet:
 def main():
     try:
         exp = '(~A + B)C'
-        bs = BoolSheet(exp)
         print('Input: {}'.format(exp))
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.parse()))
-    except InvalidSymbols:
+        bs = BoolSheet(exp)
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
+    except InvalidSymbols as err:
+        print(err.msg)
         return
 
     try:
         exp = '(A + B*)C ?'
-        bs = BoolSheet(exp)
         print('Input: {}'.format(exp))
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.parse()))
-    except InvalidSymbols:
+        bs = BoolSheet(exp)
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
+    except InvalidSymbols as err:
+        print(err.msg)
         return
 
 
