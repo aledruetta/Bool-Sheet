@@ -7,13 +7,18 @@ class Error(Exception):
     pass
 
 
-class InvalidSymbols(Error):
+class BoolSheetSymbolError(Error):
     def __init__(self, symbols):
         self.symbols = symbols
 
     @property
     def msg(self):
-        return 'Invalid Symbols Error: {}'.format(self.symbols)
+        return 'Invalid Symbols Error: {}\n'.format(self.symbols)
+
+
+class BoolSheetOperandError(Error):
+    def __init__(self, operand):
+        self.operand = operand
 
 
 class BoolSheet:
@@ -25,32 +30,74 @@ class BoolSheet:
         match = pattern.findall(self.expstr)
 
         if match:
-            raise InvalidSymbols(match)
+            raise BoolSheetSymbolError(match)
 
         return list(self.expstr)
 
-    def graph(parsexp):
-        pass
+    def nest(self, symbols):
+        nested = []
+        i = 0
+
+        while i < len(symbols):
+            if symbols[i] == '(':
+                symbols, sub = self.nest(symbols[i+1:])
+                nested.append(sub)
+                i = 0
+            elif symbols[i] == ')':
+                return symbols[i+1:], nested
+            else:
+                nested.append(symbols[i])
+                i += 1
+
+        return None, nested
+
+    def to_graph(self):
+        symbols = self.to_lst()
+        return self.nest(symbols)
 
 
 def main():
+    test = 0
+
+    test += 1
+    print('Test {}: Allowed symbols'.format(test))
     try:
         exp = '(~A + B)C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
-    except InvalidSymbols as err:
+    except BoolSheetSymbolError as err:
         print(err.msg)
-        return
 
+    test += 1
+    print('Test {}: Not allowed symbols'.format(test))
     try:
         exp = '(A + B*)C ?'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
-    except InvalidSymbols as err:
+    except BoolSheetSymbolError as err:
         print(err.msg)
-        return
+
+    test += 1
+    print('Test {}: Generate graph representation'.format(test))
+    try:
+        exp = '(~A + B)C'
+        print('Input: {}'.format(exp))
+        bs = BoolSheet(exp)
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+    except BoolSheetOperandError as err:
+        print(err.msg)
+
+    test += 1
+    print('Test {}: Generate graph representation'.format(test))
+    try:
+        exp = '~(A + B + ~(C + ~D))~C'
+        print('Input: {}'.format(exp))
+        bs = BoolSheet(exp)
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+    except BoolSheetOperandError as err:
+        print(err.msg)
 
 
 if __name__ == '__main__':
