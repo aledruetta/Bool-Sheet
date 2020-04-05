@@ -66,7 +66,7 @@ def main():
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
-    except BoolSheetSymbolError as err:
+    except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
     test += 1
@@ -76,7 +76,7 @@ def main():
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
-    except BoolSheetSymbolError as err:
+    except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
     test += 1
@@ -86,7 +86,7 @@ def main():
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
-    except BoolSheetOperandError as err:
+    except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
     test += 1
@@ -96,7 +96,7 @@ def main():
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
-    except BoolSheetOperandError as err:
+    except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
 
