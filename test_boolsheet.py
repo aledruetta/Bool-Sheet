@@ -12,7 +12,7 @@ def test():
         exp = '(~A + B)C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
+        print('Expression: {}, Symbols: {}\n'.format(bs, bs.to_lst()))
     except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
@@ -22,7 +22,7 @@ def test():
         exp = '(A + B*)C ?'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_lst()))
+        print('Expression: {}, Symbols: {}\n'.format(bs, bs.to_lst()))
     except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
@@ -32,7 +32,7 @@ def test():
         exp = '(~A + B)C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+        print('Expression: {}, Symbols: {}\n'.format(bs, bs.to_graph()))
     except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
@@ -42,7 +42,7 @@ def test():
         exp = '~(A + B + ~(C + ~D))~C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+        print('Expression: {}, Symbols: {}\n'.format(bs, bs.to_graph()))
     except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 
@@ -52,7 +52,7 @@ def test():
         exp = '~(A ~+++ (B~) ~+ ~C+)~C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
-        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+        print('Expression: {}, Symbols: {}\n'.format(bs, bs.to_graph()))
     except (BoolSheetSymbolError, BoolSheetOperandError) as err:
         print(err.msg)
 

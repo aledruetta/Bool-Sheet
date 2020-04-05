@@ -64,6 +64,9 @@ class BoolSheet:
         symbols = self.to_lst()
         return self.nest(symbols)
 
+    def __str__(self):
+        return self.expstr
+
 
 def main():
     pass
