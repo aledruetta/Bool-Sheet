@@ -20,17 +20,26 @@ class BoolSheetOperandError(Error):
     def __init__(self, operand):
         self.operand = operand
 
+    @property
+    def msg(self):
+        return 'Invalid Operand Usage Error: {}\n'.format(self.operand)
+
 
 class BoolSheet:
     def __init__(self, expstr):
         self.expstr = expstr.replace(' ', '')
 
     def to_lst(self):
-        pattern = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
-        match = pattern.findall(self.expstr)
+        pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
+        match_allowed = pattern_allowed.findall(self.expstr)
 
-        if match:
-            raise BoolSheetSymbolError(match)
+        pattern_operand = re.compile(r'\+{2,}|~[\+\)]|\+\)', re.IGNORECASE)
+        match_operand = pattern_operand.findall(self.expstr)
+
+        if match_allowed:
+            raise BoolSheetSymbolError(match_allowed)
+        if match_operand:
+            raise BoolSheetOperandError(match_operand)
 
         return list(self.expstr)
 
@@ -93,6 +102,16 @@ def main():
     print('Test {}: Generate graph representation'.format(test))
     try:
         exp = '~(A + B + ~(C + ~D))~C'
+        print('Input: {}'.format(exp))
+        bs = BoolSheet(exp)
+        print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
+    except (BoolSheetSymbolError, BoolSheetOperandError) as err:
+        print(err.msg)
+
+    test += 1
+    print('Test {}: Disjunction repetition'.format(test))
+    try:
+        exp = '~(A ~+++ (B~) ~+ ~C+)~C'
         print('Input: {}'.format(exp))
         bs = BoolSheet(exp)
         print('Expression: {}, Symbols: {}\n'.format(bs.expstr, bs.to_graph()))
