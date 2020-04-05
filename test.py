@@ -7,50 +7,46 @@ from boolsheet import BoolSheetSymbolError, BoolSheetOperandError
 
 class TestBoolSheet(unittest.TestCase):
     def test_to_lst_method(self):
-        """ Testa o método to_lst
+        """ Testa o método to_lst()
         """
-        data = '~(A + B)C'
-        bs = BoolSheet(data)
-        self.assertEqual(bs.to_lst(), ['~', '(', 'A', '+', 'B', ')', 'C'])
 
-    def test_symbol_error(self):
-        """ Testa o método to_lst com erro de símbolo
-        """
-        data = '~(A + B)*C'
-        bs = BoolSheet(data)
+        # Allowed expression
+        result = BoolSheet('~(A + B)C').to_lst()
+        self.assertEqual(result, ['~', '(', 'A', '+', 'B', ')', 'C'])
+
+        # Not allowed symbol '*'
+        result = BoolSheet('~(A + B)*C')
         with self.assertRaises(BoolSheetSymbolError):
-            bs.to_lst()
+            result.to_lst()
 
-    def test_operand_error(self):
-        """ Testa o método to_lst com erros de operando
-        """
-        data = '~(A ~+ B)C'
-        bs = BoolSheet(data)
+        # Not allowed operand '~+'
+        result = BoolSheet('~(A ~+ B)C')
         with self.assertRaises(BoolSheetOperandError):
-            bs.to_lst()
+            result.to_lst()
 
-        data = '~(A + B~)C'
-        bs = BoolSheet(data)
+        # Not allowed operand '~)'
+        result = BoolSheet('~(A + B~)C')
         with self.assertRaises(BoolSheetOperandError):
-            bs.to_lst()
+            result.to_lst()
 
-        data = '~(A ++ B)C'
-        bs = BoolSheet(data)
+        # Not allowed operand '++'
+        result = BoolSheet('~(A ++ B)C')
         with self.assertRaises(BoolSheetOperandError):
-            bs.to_lst()
+            result.to_lst()
 
-        data = '~(+A + B)C'
-        bs = BoolSheet(data)
+        # Not allowed operand '(+'
+        result = BoolSheet('~(+A + B)C')
         with self.assertRaises(BoolSheetOperandError):
-            bs.to_lst()
+            result.to_lst()
 
     def test_to_graph(self):
-        """ Testa o método to_graph
+        """ Testa o método to_graph()
         """
-        data = '~(A + B (AB + ~C)) D'
-        bs = BoolSheet(data)
-        self.assertEqual(bs.to_graph()[1], ['~', ['A', '+', 'B', ['A',
-                                            'B', '+', '~', 'C']], 'D'])
+
+        # Correct nested expressions
+        result = BoolSheet('~(A + B (AB + ~C)) D').to_graph()[1]
+        self.assertEqual(
+                result, ['~', ['A', '+', 'B', ['A', 'B', '+', '~', 'C']], 'D'])
 
 
 if __name__ == '__main__':
