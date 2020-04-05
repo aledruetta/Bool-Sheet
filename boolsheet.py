@@ -33,7 +33,8 @@ class BoolSheet:
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
         match_allowed = pattern_allowed.findall(self.expstr)
 
-        pattern_operand = re.compile(r'\+{2,}|~[\+\)]|\+\)', re.IGNORECASE)
+        pattern_operand = re.compile(r'\+{2,}|~[\+\)]|\+\)|\(\+',
+                                     re.IGNORECASE)
         match_operand = pattern_operand.findall(self.expstr)
 
         if match_allowed:
