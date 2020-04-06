@@ -19,10 +19,18 @@ class TestBoolSheet(unittest.TestCase):
         result = BoolSheet('~(A + B)C').to_lst()
         self.assertEqual(result, ['~', '(', 'A', '+', 'B', ')', 'C'])
 
+    def test_check_symbols(self):
+        """ Testa o método _check_symbols()
+        """
+
         # Not allowed symbol '*'
         result = BoolSheet('~(A + B)*C')
         with self.assertRaises(BoolSheetSymbolError):
             result.to_lst()
+
+    def test_check_operands(self):
+        """ Testa o método _check_operands()
+        """
 
         # Not allowed operand '~+'
         result = BoolSheet('~(A ~+ B)C')
