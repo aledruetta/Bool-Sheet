@@ -27,7 +27,7 @@ class BoolSheetOperandError(BoolSheetError):
 
 class BoolSheet:
     def __init__(self, expstr):
-        self.expstr = expstr.replace(' ', '')
+        self.expstr = expstr.replace(' ', '').upper()
 
     def to_lst(self):
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
@@ -63,14 +63,17 @@ class BoolSheet:
 
     def to_graph(self):
         symbols = self.to_lst()
-        return self.nest(symbols)
+        return self.nest(symbols)[1]
 
     def __str__(self):
         return self.expstr
 
 
 def main():
-    pass
+    boolexp = input('Enter your boolsheet: ')
+    boolsheet = BoolSheet(boolexp)
+
+    print(boolsheet.expstr, '==>', boolsheet.to_graph())
 
 
 if __name__ == '__main__':

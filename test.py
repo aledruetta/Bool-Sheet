@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+""" Usage:
+
+    python3 -m unittest -v test
+"""
+
 import unittest
 from boolsheet import BoolSheet
 from boolsheet import BoolSheetSymbolError, BoolSheetOperandError
@@ -44,10 +49,10 @@ class TestBoolSheet(unittest.TestCase):
         """
 
         # Correct nested expressions
-        result = BoolSheet('~(A + B (AB + ~C)(CD)) D').to_graph()[1]
+        result = BoolSheet('~(A + B (AB + ~C)(CD)) D').to_graph()
         self.assertEqual(
                 result, ['~', ['A', '+', 'B', ['A', 'B', '+', '~', 'C'],
-                         ['C', 'D']], 'D'])
+                               ['C', 'D']], 'D'])
 
 
 if __name__ == '__main__':
