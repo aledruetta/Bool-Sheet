@@ -16,7 +16,7 @@ from exceptions import (
 
 class TestBoolSheet(unittest.TestCase):
     def test_to_lst_method(self):
-        """ Testa o método to_lst()
+        """ Test the method to_lst()
         """
 
         # Allowed expression
@@ -24,7 +24,7 @@ class TestBoolSheet(unittest.TestCase):
         self.assertEqual(result, ['~', '(', 'A', '+', 'B', ')', 'C'])
 
     def test_check_symbols(self):
-        """ Testa o método _check_symbols()
+        """ Test the method _check_symbols()
         """
 
         # Check for variables
@@ -38,7 +38,7 @@ class TestBoolSheet(unittest.TestCase):
             result._check_symbols()
 
     def test_check_operands(self):
-        """ Testa o método _check_operands()
+        """ Test the method _check_operands()
         """
 
         # Not allowed operand '~+'
@@ -77,7 +77,7 @@ class TestBoolSheet(unittest.TestCase):
             result._check_operands()
 
     def test_check_parentheses(self):
-        """ Testa o método _check_parentheses()
+        """ Test the method _check_parentheses()
         """
 
         # Check parentheses nest misused
@@ -91,7 +91,7 @@ class TestBoolSheet(unittest.TestCase):
             result._check_parentheses()
 
     def test_to_graph(self):
-        """ Testa o método to_graph()
+        """ Test the method to_graph()
         """
 
         # Correct nested expressions
@@ -101,7 +101,7 @@ class TestBoolSheet(unittest.TestCase):
                                ['C', 'D']], 'D'])
 
     def test_pick_vars(self):
-        """
+        """ Test the method pick_vars()
         """
 
         # Pick boolean variables

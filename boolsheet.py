@@ -77,6 +77,9 @@ class BoolSheet:
         return list(self.expstr)
 
     def nest(self, symbols):
+        """ Nest subexpressions as a nested lists
+        """
+
         nested = []
         i = 0
 
@@ -94,11 +97,14 @@ class BoolSheet:
         return None, nested
 
     def to_graph(self):
+        """ Return a expression's graph representation
+        """
+
         symbols = self.to_lst()
         return self.nest(symbols)[1]
 
     def pick_vars(self):
-        """
+        """ Return an alphabetics ordered list of variables
         """
 
         pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
