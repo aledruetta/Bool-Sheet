@@ -16,6 +16,12 @@ class BoolSheetSymbolError(BoolSheetError):
         return 'Invalid Symbols Error: {}\n'.format(self.symbols)
 
 
+class BoolSheetVariableError(BoolSheetError):
+    @property
+    def msg(self):
+        return 'Expression Without Variables Error!\n'
+
+
 class BoolSheetOperandError(BoolSheetError):
     def __init__(self, operand):
         self.operand = operand
@@ -39,7 +45,7 @@ class BoolSheet:
         self.expstr = expstr.replace(' ', '').upper()
 
     def _check_symbols(self):
-        """ check allowed symbols: ~, [a-z], +, ()
+        """ check variables and allowed symbols: ~, [a-z], +, ()
         """
 
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
@@ -47,6 +53,12 @@ class BoolSheet:
 
         if match_allowed:
             raise BoolSheetSymbolError(match_allowed)
+
+        pattern_variable = re.compile(r'[a-z]', re.IGNORECASE)
+        match_variable = pattern_variable.search(self.expstr)
+
+        if not match_variable:
+            raise BoolSheetVariableError()
 
     def _check_operands(self):
         """ check misused operands: ~+, ~), ++, +), (+
@@ -119,8 +131,11 @@ def main():
 
     try:
         print(boolsheet.expstr, '==>', boolsheet.to_graph())
-    except (BoolSheetSymbolError, BoolSheetOperandError,
-            BoolSheetParenthesesError) as err:
+    except (
+            BoolSheetSymbolError,
+            BoolSheetOperandError,
+            BoolSheetParenthesesError,
+            BoolSheetVariableError) as err:
         print(err.msg)
 
 

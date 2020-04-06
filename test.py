@@ -9,7 +9,8 @@ import unittest
 from boolsheet import BoolSheet
 from boolsheet import BoolSheetSymbolError, \
                       BoolSheetOperandError, \
-                      BoolSheetParenthesesError
+                      BoolSheetParenthesesError, \
+                      BoolSheetVariableError
 
 
 class TestBoolSheet(unittest.TestCase):
@@ -25,10 +26,15 @@ class TestBoolSheet(unittest.TestCase):
         """ Testa o método _check_symbols()
         """
 
+        # Check for variables
+        result = BoolSheet('~(+)')
+        with self.assertRaises(BoolSheetVariableError):
+            result._check_symbols()
+
         # Not allowed symbol '*'
         result = BoolSheet('~(A + B)*C')
         with self.assertRaises(BoolSheetSymbolError):
-            result.to_lst()
+            result._check_symbols()
 
     def test_check_operands(self):
         """ Testa o método _check_operands()
@@ -37,22 +43,22 @@ class TestBoolSheet(unittest.TestCase):
         # Not allowed operand '~+'
         result = BoolSheet('~(A ~+ B)C')
         with self.assertRaises(BoolSheetOperandError):
-            result.to_lst()
+            result._check_operands()
 
         # Not allowed operand '~)'
         result = BoolSheet('~(A + B~)C')
         with self.assertRaises(BoolSheetOperandError):
-            result.to_lst()
+            result._check_operands()
 
         # Not allowed operand '++'
         result = BoolSheet('~(A ++ B)C')
         with self.assertRaises(BoolSheetOperandError):
-            result.to_lst()
+            result._check_operands()
 
         # Not allowed operand '(+'
         result = BoolSheet('~(+A + B)C')
         with self.assertRaises(BoolSheetOperandError):
-            result.to_lst()
+            result._check_operands()
 
     def test_check_parentheses(self):
         """ Testa o método _check_parentheses()
