@@ -100,6 +100,14 @@ class TestBoolSheet(unittest.TestCase):
                 result, ['~', ['A', '+', 'B', ['A', 'B', '+', '~', 'C'],
                                ['C', 'D']], 'D'])
 
+    def test_pick_vars(self):
+        """
+        """
+
+        # Pick boolean variables
+        result = BoolSheet('~(A + B)CA').pick_vars()
+        self.assertEqual(result, ['A', 'B', 'C'])
+
 
 if __name__ == '__main__':
     unittest.main()

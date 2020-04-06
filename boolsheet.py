@@ -97,6 +97,15 @@ class BoolSheet:
         symbols = self.to_lst()
         return self.nest(symbols)[1]
 
+    def pick_vars(self):
+        """
+        """
+
+        pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
+        match_vars = pattern_vars.findall(self.expstr)
+
+        return sorted(list(set(match_vars)))
+
     def __str__(self):
         return self.expstr
 
@@ -113,6 +122,8 @@ def main():
             BoolSheetParenthesesError,
             BoolSheetVariableError) as err:
         print(err.msg)
+
+    print('Variables: {}'.format(''.join(boolsheet.pick_vars())))
 
 
 if __name__ == '__main__':
