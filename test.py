@@ -7,10 +7,11 @@
 
 import unittest
 from boolsheet import BoolSheet
-from boolsheet import BoolSheetSymbolError, \
-                      BoolSheetOperandError, \
-                      BoolSheetParenthesesError, \
-                      BoolSheetVariableError
+from boolsheet import (
+        BoolSheetSymbolError,
+        BoolSheetOperandError,
+        BoolSheetParenthesesError,
+        BoolSheetVariableError)
 
 
 class TestBoolSheet(unittest.TestCase):
