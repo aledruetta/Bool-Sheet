@@ -60,6 +60,9 @@ class BoolSheet:
             raise BoolSheetOperandError(match_operand)
 
     def _check_parentheses(self):
+        """ Check for parentheses match
+        """
+
         pars = ''.join([p for p in self.expstr if p in '()'])
 
         count = 0
@@ -76,6 +79,7 @@ class BoolSheet:
 
     def to_lst(self):
         """ Check allowed symbols, misused operands and parentheses match
+            and return a list of symbols and operands
         """
 
         self._check_symbols()
