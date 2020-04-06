@@ -7,7 +7,9 @@
 
 import unittest
 from boolsheet import BoolSheet
-from boolsheet import BoolSheetSymbolError, BoolSheetOperandError
+from boolsheet import BoolSheetSymbolError, \
+                      BoolSheetOperandError, \
+                      BoolSheetParenthesesError
 
 
 class TestBoolSheet(unittest.TestCase):
@@ -51,6 +53,20 @@ class TestBoolSheet(unittest.TestCase):
         result = BoolSheet('~(+A + B)C')
         with self.assertRaises(BoolSheetOperandError):
             result.to_lst()
+
+    def test_check_parentheses(self):
+        """ Testa o método _check_parentheses()
+        """
+
+        # Check parentheses nest misused
+        result = BoolSheet('~(A ~+ B))C')
+        with self.assertRaises(BoolSheetParenthesesError):
+            result._check_parentheses()
+
+        # Check parentheses nest misused
+        result = BoolSheet('~)(A ~+ B)C(')
+        with self.assertRaises(BoolSheetParenthesesError):
+            result._check_parentheses()
 
     def test_to_graph(self):
         """ Testa o método to_graph()

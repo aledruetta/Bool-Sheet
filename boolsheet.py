@@ -25,6 +25,15 @@ class BoolSheetOperandError(BoolSheetError):
         return 'Invalid Operand Usage Error: {}\n'.format(self.operand)
 
 
+class BoolSheetParenthesesError(BoolSheetError):
+    def __init__(self, pars):
+        self.pars = pars
+
+    @property
+    def msg(self):
+        return 'Invalid Parentheses Error: {}\n'.format(self.pars)
+
+
 class BoolSheet:
     def __init__(self, expstr):
         self.expstr = expstr.replace(' ', '').upper()
@@ -51,7 +60,19 @@ class BoolSheet:
             raise BoolSheetOperandError(match_operand)
 
     def _check_parentheses(self):
-        pass
+        pars = [p for p in self.expstr if p in '()']
+
+        count = 0
+        for p in pars:
+            if p == '(':
+                count += 1
+            else:
+                count -= 1
+            if count < 0:
+                raise BoolSheetParenthesesError(''.join(pars))
+
+        if count != 0:
+            raise BoolSheetParenthesesError(''.join(pars))
 
     def to_lst(self):
         """ Check allowed symbols, misused operands and parentheses match
@@ -92,7 +113,11 @@ def main():
     boolexp = input('Enter your boolsheet: ')
     boolsheet = BoolSheet(boolexp)
 
-    print(boolsheet.expstr, '==>', boolsheet.to_graph())
+    try:
+        print(boolsheet.expstr, '==>', boolsheet.to_graph())
+    except (BoolSheetSymbolError, BoolSheetOperandError,
+            BoolSheetParenthesesError) as err:
+        print(err.msg)
 
 
 if __name__ == '__main__':
