@@ -60,6 +60,21 @@ class TestBoolSheet(unittest.TestCase):
         with self.assertRaises(BoolSheetOperandError):
             result._check_operands()
 
+        # Not allowed start with '+'
+        result = BoolSheet('+~(A + B)C')
+        with self.assertRaises(BoolSheetOperandError):
+            result._check_operands()
+
+        # Not allowed end with '+'
+        result = BoolSheet('~(A + B)C+')
+        with self.assertRaises(BoolSheetOperandError):
+            result._check_operands()
+
+        # Not allowed end with '~'
+        result = BoolSheet('~(A + B)C~')
+        with self.assertRaises(BoolSheetOperandError):
+            result._check_operands()
+
     def test_check_parentheses(self):
         """ Testa o método _check_parentheses()
         """

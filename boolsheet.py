@@ -64,8 +64,16 @@ class BoolSheet:
         """ check misused operands: ~+, ~), ++, +), (+
         """
 
-        pattern_operand = re.compile(r'^\+|\+{2,}|~[\+\)]|\+\)|\(\+',
-                                     re.IGNORECASE)
+        patterns = '|'.join([
+                r'^\+',         # start with '+'
+                r'[~\+]$',      # end with '~' or '+'
+                r'\+{2,}',      # repetition '+'
+                r'~[\+\)]',     # '~' followed by '+' or ')'
+                r'\+\)',        # '+' followed by ')'
+                r'\(\+'         # '+' after '('
+                ])
+
+        pattern_operand = re.compile(patterns, re.IGNORECASE)
         match_operand = pattern_operand.findall(self.expstr)
 
         if match_operand:
