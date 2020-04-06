@@ -7,7 +7,7 @@
 
 import unittest
 from boolsheet import BoolSheet
-from boolsheet import (
+from exceptions import (
         BoolSheetSymbolError,
         BoolSheetOperandError,
         BoolSheetParenthesesError,
