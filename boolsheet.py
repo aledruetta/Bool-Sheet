@@ -13,7 +13,7 @@ class BoolSheet:
         self.expstr = expstr.replace(' ', '').upper()
 
     def _check_symbols(self):
-        """ checks variables and allowed symbols: ~, [a-z], +, ()
+        """ Checks variables and allowed symbols: ~, [a-z], +, ()
         """
 
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
@@ -29,7 +29,7 @@ class BoolSheet:
             raise BoolSheetVariableError()
 
     def _check_operands(self):
-        """ checks misused operands: ~+, ~), ++, +), (+
+        """ Checks misused operands: ~+, ~), ++, +), (+
         """
 
         patterns = '|'.join([
