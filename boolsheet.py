@@ -13,7 +13,7 @@ class BoolSheet:
         self.expstr = expstr.replace(' ', '').upper()
 
     def _check_symbols(self):
-        """ check variables and allowed symbols: ~, [a-z], +, ()
+        """ checks variables and allowed symbols: ~, [a-z], +, ()
         """
 
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
@@ -29,7 +29,7 @@ class BoolSheet:
             raise BoolSheetVariableError()
 
     def _check_operands(self):
-        """ check misused operands: ~+, ~), ++, +), (+
+        """ checks misused operands: ~+, ~), ++, +), (+
         """
 
         patterns = '|'.join([
@@ -48,7 +48,7 @@ class BoolSheet:
             raise BoolSheetOperandError(match_operand)
 
     def _check_parentheses(self):
-        """ Check for parentheses match
+        """ Checks for parentheses match
         """
 
         pars = ''.join([p for p in self.expstr if p in '()'])
@@ -66,7 +66,7 @@ class BoolSheet:
             raise BoolSheetParenthesesError(pars)
 
     def to_lst(self):
-        """ Check allowed symbols, misused operands and parentheses match
+        """ Checks allowed symbols, misused operands and parentheses match
             and return a list of symbols and operands
         """
 
@@ -77,7 +77,7 @@ class BoolSheet:
         return list(self.expstr)
 
     def nest(self, symbols):
-        """ Nest subexpressions as a nested lists
+        """ Nests subexpressions as a nested lists
         """
 
         nested = []
@@ -97,14 +97,14 @@ class BoolSheet:
         return None, nested
 
     def to_graph(self):
-        """ Return a expression's graph representation
+        """ Returns the graph representation of the expression
         """
 
         symbols = self.to_lst()
         return self.nest(symbols)[1]
 
     def pick_vars(self):
-        """ Return an alphabetics ordered list of variables
+        """ Returns an alphabetically ordered list of variables
         """
 
         pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
