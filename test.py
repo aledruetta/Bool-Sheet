@@ -44,9 +44,10 @@ class TestBoolSheet(unittest.TestCase):
         """
 
         # Correct nested expressions
-        result = BoolSheet('~(A + B (AB + ~C)) D').to_graph()[1]
+        result = BoolSheet('~(A + B (AB + ~C)(CD)) D').to_graph()[1]
         self.assertEqual(
-                result, ['~', ['A', '+', 'B', ['A', 'B', '+', '~', 'C']], 'D'])
+                result, ['~', ['A', '+', 'B', ['A', 'B', '+', '~', 'C'],
+                         ['C', 'D']], 'D'])
 
 
 if __name__ == '__main__':
