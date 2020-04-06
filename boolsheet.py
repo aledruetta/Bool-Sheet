@@ -64,7 +64,7 @@ class BoolSheet:
         """ check misused operands: ~+, ~), ++, +), (+
         """
 
-        pattern_operand = re.compile(r'\+{2,}|~[\+\)]|\+\)|\(\+',
+        pattern_operand = re.compile(r'^\+|\+{2,}|~[\+\)]|\+\)|\(\+',
                                      re.IGNORECASE)
         match_operand = pattern_operand.findall(self.expstr)
 
