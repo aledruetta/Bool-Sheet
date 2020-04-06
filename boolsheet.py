@@ -29,18 +29,37 @@ class BoolSheet:
     def __init__(self, expstr):
         self.expstr = expstr.replace(' ', '').upper()
 
-    def to_lst(self):
+    def _check_symbols(self):
+        """ check allowed symbols: ~, [a-z], +, ()
+        """
+
         pattern_allowed = re.compile(r'[^\(\)\+~a-z]', re.IGNORECASE)
         match_allowed = pattern_allowed.findall(self.expstr)
+
+        if match_allowed:
+            raise BoolSheetSymbolError(match_allowed)
+
+    def _check_operands(self):
+        """ check misused operands: ~+, ~), ++, +), (+
+        """
 
         pattern_operand = re.compile(r'\+{2,}|~[\+\)]|\+\)|\(\+',
                                      re.IGNORECASE)
         match_operand = pattern_operand.findall(self.expstr)
 
-        if match_allowed:
-            raise BoolSheetSymbolError(match_allowed)
         if match_operand:
             raise BoolSheetOperandError(match_operand)
+
+    def _check_parentheses(self):
+        pass
+
+    def to_lst(self):
+        """ Check allowed symbols, misused operands and parentheses match
+        """
+
+        self._check_symbols()
+        self._check_operands()
+        self._check_parentheses()
 
         return list(self.expstr)
 
