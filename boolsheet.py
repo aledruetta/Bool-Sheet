@@ -114,6 +114,13 @@ class BoolSheet:
 
         return sorted(list(set(match_vars)))
 
+    def get_inner(self, inner):
+        for exp in inner:
+            if isinstance(exp, list):
+                inner = self.bool_table(exp)
+
+        return inner
+
     def __str__(self):
         return self.expstr
 
@@ -133,6 +140,7 @@ def main():
             print(err.msg)
 
         print('Variables: {}'.format(''.join(boolsheet.pick_vars())))
+        print(boolsheet.bool_table(boolsheet.to_graph()))
 
 
 if __name__ == '__main__':
