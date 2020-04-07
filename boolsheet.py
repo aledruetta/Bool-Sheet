@@ -105,19 +105,28 @@ class BoolSheet:
         symbols = self.to_lst()
         return self.nest(symbols)[1]
 
-    def pick_vars(self):
+    def pick_vars(self, expr=None):
         """ Returns an alphabetically ordered list of variables
         """
 
+        if expr is None:
+            expr = self.expstr
+
         pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
-        match_vars = pattern_vars.findall(self.expstr)
+        match_vars = pattern_vars.findall(expr)
 
         return sorted(list(set(match_vars)))
 
-    def get_inner(self, inner):
+    def get_inner(self, inner=None):
+        """
+        """
+
+        if inner is None:
+            inner = self.to_graph()
+
         for exp in inner:
             if isinstance(exp, list):
-                inner = self.bool_table(exp)
+                inner = self.get_inner(exp)
 
         return inner
 
@@ -127,11 +136,11 @@ class BoolSheet:
 
 def main():
     boolexp = input('Enter your boolsheet: ')
-    boolsheet = BoolSheet(boolexp)
+    bs = BoolSheet(boolexp)
 
     if DEBUG:
         try:
-            print(boolsheet.expstr, '==>', boolsheet.to_graph())
+            print(bs.expstr, '==>', bs.to_graph())
         except (
                 BoolSheetSymbolError,
                 BoolSheetOperandError,
@@ -139,8 +148,9 @@ def main():
                 BoolSheetVariableError) as err:
             print(err.msg)
 
-        print('Variables: {}'.format(''.join(boolsheet.pick_vars())))
-        print(boolsheet.bool_table(boolsheet.to_graph()))
+        print('Variables: '
+              '{}'.format(''.join(bs.pick_vars())))
+        print(bs.get_inner())
 
 
 if __name__ == '__main__':

@@ -108,6 +108,14 @@ class TestBoolSheet(unittest.TestCase):
         result = BoolSheet('~(A + B)CA').pick_vars()
         self.assertEqual(result, ['A', 'B', 'C'])
 
+    def test_get_inner(self):
+        """ Test the method get_inner()
+        """
+
+        # Get the first innermost
+        result = BoolSheet('~(A + B (AB + ~C)(CD)) D').get_inner()
+        self.assertEqual(result, ['C', 'D'])
+
 
 if __name__ == '__main__':
     unittest.main()
