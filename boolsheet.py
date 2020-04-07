@@ -7,6 +7,8 @@ from exceptions import (
         BoolSheetVariableError,
         BoolSheetParenthesesError)
 
+DEBUG = True
+
 
 class BoolSheet:
     def __init__(self, expstr):
@@ -120,16 +122,17 @@ def main():
     boolexp = input('Enter your boolsheet: ')
     boolsheet = BoolSheet(boolexp)
 
-    try:
-        print(boolsheet.expstr, '==>', boolsheet.to_graph())
-    except (
-            BoolSheetSymbolError,
-            BoolSheetOperandError,
-            BoolSheetParenthesesError,
-            BoolSheetVariableError) as err:
-        print(err.msg)
+    if DEBUG:
+        try:
+            print(boolsheet.expstr, '==>', boolsheet.to_graph())
+        except (
+                BoolSheetSymbolError,
+                BoolSheetOperandError,
+                BoolSheetParenthesesError,
+                BoolSheetVariableError) as err:
+            print(err.msg)
 
-    print('Variables: {}'.format(''.join(boolsheet.pick_vars())))
+        print('Variables: {}'.format(''.join(boolsheet.pick_vars())))
 
 
 if __name__ == '__main__':
