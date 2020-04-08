@@ -86,7 +86,7 @@ class BoolSheet:
         return list(self.expstr)
 
     def nest_parentheses(self, symbols):
-        """ Nests subexpressions enclosed in parentheses as a nested lists
+        """ Nests subexpressions enclosed in parentheses as lists
         """
 
         nested = []
@@ -105,12 +105,34 @@ class BoolSheet:
 
         return None, nested
 
+    def complement_vars(self, symbols):
+        """ Nests complemented variables as lists
+        """
+
+        i = 0
+
+        while i < len(symbols):
+            if isinstance(symbols[i], list):
+                symbols[i] = self.complement_vars(symbols[i])
+            elif symbols[i] == '~' \
+                    and isinstance(symbols[i+1], str) \
+                    and symbols[i+1].isalpha():
+                symbols[i] = [symbols[i], symbols[i+1]]
+                symbols.pop(i+1)
+
+            i += 1
+
+        return symbols
+
     def to_graph(self):
         """ Returns the graph representation of the expression
         """
 
         symbols = self.to_lst()
-        return self.nest_parentheses(symbols)[1]
+        pars = self.nest_parentheses(symbols)[1]
+        comp = self.complement_vars(pars)
+
+        return comp
 
     def pick_vars(self):
         """ Returns an alphabetically ordered list of variables
@@ -154,7 +176,7 @@ def main():
 
     if DEBUG:
         try:
-            print(bs.expstr, '==>', bs.to_graph())
+            print(bs.expstr, '==>', bs.to_lst())
         except (
                 BoolSheetSymbolError,
                 BoolSheetOperandError,
@@ -164,7 +186,7 @@ def main():
 
         print('Variables: '
               '{}'.format(''.join(bs.pick_vars())))
-        print(bs.get_inner())
+        print(bs.to_graph())
 
 
 if __name__ == '__main__':
