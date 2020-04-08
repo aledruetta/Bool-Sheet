@@ -11,7 +11,14 @@ DEBUG = True
 
 
 class BoolSheet:
+    """ This class ofers a bunch of methods for manipulating a
+        boolean expression and its true table
+    """
+
     def __init__(self, expstr):
+        """ Initialize class attributes: expstr
+        """
+
         self.expstr = expstr.replace(' ', '').upper()
 
     def _check_symbols(self):
@@ -78,8 +85,8 @@ class BoolSheet:
 
         return list(self.expstr)
 
-    def nest(self, symbols):
-        """ Nests subexpressions as a nested lists
+    def nest_parentheses(self, symbols):
+        """ Nests subexpressions enclosed in parentheses as a nested lists
         """
 
         nested = []
@@ -87,7 +94,7 @@ class BoolSheet:
 
         while i < len(symbols):
             if symbols[i] == '(':
-                symbols, sub = self.nest(symbols[i+1:])
+                symbols, sub = self.nest_parentheses(symbols[i+1:])
                 nested.append(sub)
                 i = 0
             elif symbols[i] == ')':
@@ -103,22 +110,29 @@ class BoolSheet:
         """
 
         symbols = self.to_lst()
-        return self.nest(symbols)[1]
+        return self.nest_parentheses(symbols)[1]
 
-    def pick_vars(self, expr=None):
+    def pick_vars(self):
         """ Returns an alphabetically ordered list of variables
         """
 
-        if expr is None:
-            expr = self.expstr
-
         pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
-        match_vars = pattern_vars.findall(expr)
+        match_vars = pattern_vars.findall(self.expstr)
 
         return sorted(list(set(match_vars)))
 
-    def get_inner(self, inner=None):
+    def replace_var(self, term):
         """
+        """
+        pass
+
+    def table(self):
+        """
+        """
+        pass
+
+    def get_inner(self, inner=None):
+        """ Returns the last innermost subexpression
         """
 
         if inner is None:
