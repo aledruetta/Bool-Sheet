@@ -85,6 +85,15 @@ class BoolSheet:
 
         return list(self.expstr)
 
+    def pick_vars(self):
+        """ Returns an alphabetically ordered list of variables
+        """
+
+        pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
+        match_vars = pattern_vars.findall(self.expstr)
+
+        return sorted(list(set(match_vars)))
+
     def nest_parentheses(self, symbols):
         """ Nests subexpressions enclosed in parentheses as lists
         """
@@ -105,18 +114,18 @@ class BoolSheet:
 
         return None, nested
 
-    def complement_vars(self, symbols):
-        """ Nests complemented variables as lists
+    def complement(self, symbols):
+        """ Group complemented variables and subexpressions as lists
         """
 
         i = 0
 
         while i < len(symbols):
             if isinstance(symbols[i], list):
-                symbols[i] = self.complement_vars(symbols[i])
-            elif symbols[i] == '~' \
-                    and isinstance(symbols[i+1], str) \
-                    and symbols[i+1].isalpha():
+                symbols[i] = self.complement(symbols[i])
+            elif symbols[i] == '~':
+                if isinstance(symbols[i+1], list):
+                    symbols[i+1] = self.complement(symbols[i+1])
                 symbols[i] = [symbols[i], symbols[i+1]]
                 symbols.pop(i+1)
 
@@ -130,20 +139,11 @@ class BoolSheet:
 
         symbols = self.to_lst()
         pars = self.nest_parentheses(symbols)[1]
-        comp = self.complement_vars(pars)
+        comp = self.complement(pars)
 
         return comp
 
-    def pick_vars(self):
-        """ Returns an alphabetically ordered list of variables
-        """
-
-        pattern_vars = re.compile(r'[A-Z]', re.IGNORECASE)
-        match_vars = pattern_vars.findall(self.expstr)
-
-        return sorted(list(set(match_vars)))
-
-    def replace_var(self, term):
+    def replace_var(self, symbols, term):
         """
         """
         pass

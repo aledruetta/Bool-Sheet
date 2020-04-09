@@ -90,6 +90,14 @@ class TestBoolSheet(unittest.TestCase):
         with self.assertRaises(BoolSheetParenthesesError):
             result._check_parentheses()
 
+    def test_to_lst(self):
+        """ Test the method to_lst()
+        """
+
+        # Test string to list convertion
+        result = BoolSheet('~(A + B)CA').to_lst()
+        self.assertEqual(result, ['~', '(', 'A', '+', 'B', ')', 'C', 'A'])
+
     def test_nest_parentheses(self):
         """ Test the method nest_parentheses()
         """
@@ -99,23 +107,15 @@ class TestBoolSheet(unittest.TestCase):
         result = bs.nest_parentheses(bs.expstr)[1]
         self.assertEqual(result, ['~', ['A', '+', 'B'], ['C', 'A']])
 
-    def test_complement_vars(self):
-        """ Test the method complement_vars()
+    def test_complement(self):
+        """ Test the method complement()
         """
 
         # Test complemented variables
         bs = BoolSheet('~(A + ~B) ~CA')
-        result = bs.complement_vars(bs.nest_parentheses(bs.to_lst())[1])
+        result = bs.complement(bs.nest_parentheses(bs.to_lst())[1])
         self.assertEqual(
-                result, ['~', ['A', '+', ['~', 'B']], ['~', 'C'], 'A'])
-
-    def test_to_lst(self):
-        """ Test the method to_lst()
-        """
-
-        # Test string to list convertion
-        result = BoolSheet('~(A + B)CA').to_lst()
-        self.assertEqual(result, ['~', '(', 'A', '+', 'B', ')', 'C', 'A'])
+                result, [['~', ['A', '+', ['~', 'B']]], ['~', 'C'], 'A'])
 
     def test_to_graph(self):
         """ Test the method to_graph()
@@ -124,8 +124,8 @@ class TestBoolSheet(unittest.TestCase):
         # Correct nested expressions
         result = BoolSheet('~(A + B (AB + ~C)(CD)) D').to_graph()
         self.assertEqual(
-                result, ['~', ['A', '+', 'B', ['A', 'B', '+', ['~', 'C']],
-                               ['C', 'D']], 'D'])
+                result, [['~', ['A', '+', 'B', ['A', 'B', '+', ['~', 'C']],
+                         ['C', 'D']]], 'D'])
 
     def test_pick_vars(self):
         """ Test the method pick_vars()
